@@ -22,14 +22,3 @@ struct Invoker{
 
 template <typename I>
 Invoker(I) -> Invoker<I>;
-
-void foo(int i){
-};
-
-int main(){
-    Invoker<std::add_pointer_t<int(const int&)>> 
-    f1([](const int& i) {return i;});
-    auto f2 = Invoker([](const int& i) {return i+10;});
-    auto f3 = Invoker(foo);
-    return f2(1);
-}

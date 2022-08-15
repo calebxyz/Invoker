@@ -24,9 +24,11 @@ struct Invoker{
 #endif // __cplusplus > 201703L
     Invoker(I invocable) : invocable_(std::move(invocable)) {}
     
-    template <typename... Args>
 #if __cplusplus > 201703L
+    template <typename... Args>
     requires std::invocable<Invocable&, Args...>
+#else
+    template <typename... Args, typename = typename std::enable_if<std::is_invocable<Invocable_T, Args...>::value>::type>
 #endif // __cplusplus > 201703L
     decltype(auto) operator()(Args&&... args){
         return std::invoke(invocable_, std::forward<Args>(args)...);

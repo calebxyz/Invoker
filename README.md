@@ -35,7 +35,8 @@ int main(){
     auto f4 = Invoker(functor());
     auto f5 = Invoker([f1](int i) mutable {return f1(i);});
     return doit(f1);
-}```
+}
+```
 
 
 

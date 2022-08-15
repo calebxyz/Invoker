@@ -37,7 +37,8 @@ int main(){
     return doit(f1);
 }
 ```
-
+Benchmark: 
+![Benchmark](02-Invoker-Benchmark.png)
 
 
 

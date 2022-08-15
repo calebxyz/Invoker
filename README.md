@@ -28,8 +28,7 @@ int doit(Invoker<std::add_pointer_t<int(const int&)>> f){
 }
 
 int main(){
-    Invoker<std::add_pointer_t<int(const int&)>> 
-    f1([](const int& i) {return i;});
+    Invoker<int(const int&)> f1([](const int& i) {return i;});
     auto f2 = Invoker([](const int& i) {return i+10;});
     auto f3 = Invoker(foo);
     auto f4 = Invoker(functor());

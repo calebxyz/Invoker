@@ -11,9 +11,10 @@ passing a certain type of function pointer or just use it as a auto deduced temp
 
 As you can see the performance is the same as using a lambda and it is much better then with std::function, The benchmark was compiled with Clang 13.
 
-Usage example: 
+Usage example:
 
-```void foo(int i){
+```C++
+void foo(int i){
 };
 
 struct functor{

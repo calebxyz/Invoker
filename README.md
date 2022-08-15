@@ -23,7 +23,7 @@ struct functor{
     }
 };
 
-int doit(Invoker<std::add_pointer_t<int(const int&)>> f){
+int doit(Invoker<int(const int&)> f){
     return f(1);
 }
 

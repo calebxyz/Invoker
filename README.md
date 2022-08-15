@@ -1,5 +1,5 @@
 # Invoker
-Generic Invocation wrapper , lightweight function written in C++20 
+Generic Invocation wrapper , lightweight function written in C++>=17
 
 As you may know std::functions are heavy because they use Type Erasure and their invocation might be much slower then 
 a regular lambdas or a free functions but on the other hand we cannot use lambdas in virtual functions (yet) 

@@ -4,7 +4,8 @@
 
 template <typename Invocable>
 struct Invoker{
-    using Invocable_T = Invocable;
+    using Invocable_T = std::conditional_t<std::is_function_v<Invocable>, 
+    std::add_pointer_t<Invocable>, Invocable>;
     template <typename I> 
     requires std::convertible_to<I, Invocable_T>
     Invoker(I invocable): 

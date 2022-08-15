@@ -4,11 +4,11 @@
 
 template <typename Invocable>
 struct Invoker{
-    using Invocable_t = Invocable;
+    using Invocable_T = Invocable;
     template <typename I> 
-    requires std::convertible_to<I, Invocable_t>
+    requires std::convertible_to<I, Invocable_T>
     Invoker(I invocable): 
-    invocable_(std::move(invocable)) {}; 
+    invocable_(std::move(invocable)) {} 
     
     template <typename... Args>
     requires std::invocable<Invocable&, Args...>
@@ -17,7 +17,7 @@ struct Invoker{
     }
     
     private: 
-    Invocable invocable_; 
+    Invocable_T invocable_; 
 };
 
 template <typename I>

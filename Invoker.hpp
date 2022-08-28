@@ -22,8 +22,9 @@ template <typename Invocable>
 struct Invoker{
 #if INVOKER_CPLUSPLUS > 201402L
     using Invocable_T = std::conditional_t<std::is_function_v<Invocable>, std::add_pointer_t<Invocable>, Invocable>;
-    using is_invocable = std::is_invocable;
     
+    template <typename F, typename... Args>
+    using is_invocable = std::is_invocable<F, Args...>;   
 #else
     using Invocable_T = typename std::conditional<std::is_function<Invocable>::value,
                         typename std::add_pointer<Invocable>::type, Invocable>::type;
@@ -32,7 +33,6 @@ struct Invoker{
     struct is_invocable :
     std::is_constructible<std::function<void(Args ...)>, std::reference_wrapper<typename std::remove_reference<F>::type>>
     {};
-
 #endif
     template <typename I>
 #if INVOKER_CPLUSPLUS > 201703L

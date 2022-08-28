@@ -17,13 +17,22 @@
 #include <concepts>
 #endif // INVOKER_CPLUSPLUS > 201703L
 
+
 template <typename Invocable>
 struct Invoker{
 #if INVOKER_CPLUSPLUS > 201402L
     using Invocable_T = std::conditional_t<std::is_function_v<Invocable>, std::add_pointer_t<Invocable>, Invocable>;
+    using is_invocable = std::is_invocable;
+    
 #else
     using Invocable_T = typename std::conditional<std::is_function<Invocable>::value,
                         typename std::add_pointer<Invocable>::type, Invocable>::type;
+
+    template <typename F, typename... Args>
+    struct is_invocable :
+    std::is_constructible<std::function<void(Args ...)>, std::reference_wrapper<typename std::remove_reference<F>::type>>
+    {};
+
 #endif
     template <typename I>
 #if INVOKER_CPLUSPLUS > 201703L
@@ -31,11 +40,9 @@ struct Invoker{
 #endif // INVOKER_CPLUSPLUS > 201703L
     Invoker(I invocable) : invocable_(std::move(invocable))
     {
-#if INVOKER_CPLUSPLUS == 201703L
-        static_assert(std::is_convertible_v<I, Invocable_T>, "Type 'Invocable' is not a function!");
-#else
+#if INVOKER_CPLUSPLUS <= 201703L
         static_assert(std::is_convertible<I, Invocable_T>::value, "Type 'Invocable' is not a function!");
-#endif // INVOKER_CPLUSPLUS == 201703L
+#endif // INVOKER_CPLUSPLUS <= 201703L
     }
     
     template <typename... Args>
@@ -43,13 +50,14 @@ struct Invoker{
     requires std::invocable<Invocable&, Args...>
 #endif // INVOKER_CPLUSPLUS > 201703L
 #if INVOKER_CPLUSPLUS > 201103L
-    inline decltype(auto) operator()(Args&&... args){
+    inline decltype(auto) operator()(Args&&... args)
 #else
-    inline auto operator()(Args&&... args) -> typename std::result_of<Invocable_T(Args&&...)>::type { // 
-#endif
-#if INVOKER_CPLUSPLUS == 201703L
-        static_assert(std::is_invocable_v<Invocable_T, Args...>, "Type 'Invocable' is not a function or cannot invoke with these arguments!");
-#endif // INVOKER_CPLUSPLUS == 201703L
+    inline auto operator()(Args&&... args) -> typename std::result_of<Invocable_T(Args&&...)>::type 
+#endif // INVOKER_CPLUSPLUS > 201103L
+    {
+#if INVOKER_CPLUSPLUS <= 201703L
+        static_assert(is_invocable<Invocable_T, Args...>::value, "Type 'Invocable' is not a function or cannot invoke with these arguments!");
+#endif // INVOKER_CPLUSPLUS <= 201703L
 #if INVOKER_CPLUSPLUS > 201402L
         return std::invoke(invocable_, std::forward<Args>(args)...);
 #else

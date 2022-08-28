@@ -29,7 +29,7 @@ struct Invoker{
 #if INVOKER_CPLUSPLUS > 201703L
     requires std::convertible_to<I, Invocable_T>
 #endif // INVOKER_CPLUSPLUS > 201703L
-    explicit Invoker(I invocable) : invocable_(std::move(invocable))
+    Invoker(I invocable) : invocable_(std::move(invocable))
     {
 #if INVOKER_CPLUSPLUS == 201703L
         static_assert(std::is_convertible_v<I, Invocable_T>, "Type 'Invocable' is not a function!");

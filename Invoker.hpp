@@ -1,4 +1,6 @@
-#pragma once
+#ifndef INVOKER_HPP
+#define INVOKER_HPP
+
 #ifdef _MSC_VER
 #define INVOKER_CPLUSPLUS _MSVC_LANG
 #else
@@ -102,3 +104,5 @@ template <typename I>
 Invoker(I) -> Invoker<I>;
 #endif // INVOKER_CPLUSPLUS > 201402L
 #endif // INVOKER_CPLUSPLUS > 201103L
+
+#endif // INVOKER_HPP
